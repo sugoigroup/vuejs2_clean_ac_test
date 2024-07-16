@@ -1,23 +1,20 @@
 import { injectable } from 'inversify';
 import container from '@/di/patientInjector';
-import MyResultDataObject from '@/mypackage/patient/repositories/dataObjects/MyResultDataObject';
 import UserRepositoyOutput from '@/mypackage/patient/repositories/InputOutput/UserRepositoryOutput';
+import News from '@/mypackage/apis/provider/News'
 
 @injectable()
 export default class UserRepository {
   userRepositoyOutput;
+  news;
   constructor(
   ) {
     this.userRepositoyOutput = container.get(UserRepositoyOutput);
+    this.news = container.get(News);
   }
 
-  fetchUserById(id) {
-    console.log(id);
-    // 실제 API 호출 또는 데이터베이스 쿼리를 모방합니다.
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(this.userRepositoyOutput.output(new MyResultDataObject(11, 'John Doe2' )));
-      }, 1000);
-    });
+  async fetchUserById(toRepositoryInput) {
+    const response = await this.news.apiGetDetailPost(toRepositoryInput.myDataObject.id);
+    return this.userRepositoyOutput.output(response.data)
   }
 }

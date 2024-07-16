@@ -5,6 +5,9 @@ import User from '@/mypackage/patient/entities/User';
 import UserRepository from '@/mypackage/patient/repositories/UserRepository';
 
 import FetchUserUseCase from '@/mypackage/patient/usecases/FetchUserUseCase';
+import FetchUserUseCaseInput from '@/mypackage/patient/usecases/InputOutput/FetchUserUseCaseInput';
+import FetchUserUseCaseOutput from '@/mypackage/patient/usecases/InputOutput/FetchUserUseCaseOutput';
+import MyEntity1 from '@/mypackage/patient/entities/MyEntity1';
 
 
 describe('FetchUserUseCase', () => {
@@ -14,10 +17,21 @@ describe('FetchUserUseCase', () => {
         jest.spyOn(userRepository, 'fetchUserById').mockResolvedValue({ id: 1, name: 'John Doe2' });
 
         const fetchUserUseCase = container.get(FetchUserUseCase);
-        const user = await fetchUserUseCase.execute(1);
+        const fetchUserUseCaseInput = container.get(FetchUserUseCaseInput);
 
-        expect(user).toBeInstanceOf(User);
-        expect(user.id).toBe(1);
-        expect(user.name).toBe('John Doe2');
+        const myinput = fetchUserUseCaseInput.input(
+            new MyEntity1 (
+                1,
+                'myName',
+                {'aa':'a'},
+                new User('id', 'name')
+            )
+        );
+
+        const user = await fetchUserUseCase.execute(myinput);
+
+        expect(user).toBeInstanceOf(FetchUserUseCaseOutput);
+        expect(user.get().id).toBe(1);
+        expect(user.get().name).toBe('myName');
     });
   });

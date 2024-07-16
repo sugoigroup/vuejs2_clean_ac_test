@@ -7,17 +7,27 @@ import UserRepositoryOutput from '@/mypackage/patient/repositories/InputOutput/U
 
 
 import FetchUserUseCase from '@/mypackage/patient/usecases/FetchUserUseCase';
+
+import FetchUserDebugUseCase from '@/mypackage/patient/usecases/FetchUserDebugUseCase';
 import FetchUserUseCaseInput from  '@/mypackage/patient/usecases/InputOutput/FetchUserUseCaseInput';
 import FetchUserUseCaseOutput from '@/mypackage/patient/usecases/InputOutput/FetchUserUseCaseOutput';
 
+import News from '@/mypackage/apis/provider/News';
 
 
 const container = new Container();
 container.bind(UserRepository).toSelf();
 container.bind(UserRepositoryInput).toSelf();
 container.bind(UserRepositoryOutput).toSelf();
-container.bind(FetchUserUseCase).toSelf();
+if (process.env.NODE_ENV  !== 'production') {   
+    container.bind(FetchUserUseCase).to(FetchUserDebugUseCase);
+} else {
+    container.bind(FetchUserUseCase).toSelf();
+}
+
 container.bind(FetchUserUseCaseInput).toSelf();
 container.bind(FetchUserUseCaseOutput).toSelf();
+
+container.bind(News).toSelf();
 
 export default container;

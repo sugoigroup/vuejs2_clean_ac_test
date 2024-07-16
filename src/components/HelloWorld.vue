@@ -1,12 +1,14 @@
 <template>
   <div>
-    <span v-if="user">ID: {{ userid }}</span><br/>
-    <span v-if="user">User: {{ username }}</span><br/>
+    <span v-if="user">ID: {{ userid }}</span
+    ><br />
+    <span v-if="user">User: {{ username }}</span
+    ><br />
     <button @click="fetchUser">Fetch User</button>
   </div>
 </template>
 
-<script> 
+<script>
 import container from '@/di/patientInjector'
 import FetchUserUseCase from '@/mypackage/patient/usecases/FetchUserUseCase';
 
@@ -33,17 +35,35 @@ export default {
     async fetchUser() {
       const fetchUserUseCase = container.get(FetchUserUseCase);
       const fetchUserUseCaseInput = container.get(FetchUserUseCaseInput);
-      
-      
-      this.user = await fetchUserUseCase.execute(fetchUserUseCaseInput.input(
-        new MyEntity1 (
-          1,
-          'myName',
-          {'aa':'a'},
-          new User('id', 'name')
-        )
-      ));
+
+
+
+    const [user1, user2] = await Promise.all([
+      fetchUserUseCase.execute(fetchUserUseCaseInput.input(
+          new MyEntity1 (
+            1,
+            'myName',
+            {'aa':'a'},
+            new User('id', 'name')
+          )
+        )),
+        fetchUserUseCase.execute(fetchUserUseCaseInput.input(
+          new MyEntity1 (
+            2,
+            'myName2',
+            {'aa2':'a2'},
+            new User('id2', 'name2')
+          )
+        ))
+    ]);
+
+
+      console.log(user1);
+      console.log(user2);
+      this.user = user1;
+
     }
+
   }
 };
 </script>

@@ -18,9 +18,9 @@ export default class FetchUserUseCaseInput {
         return this;
     }
 
-    toDataObject() {
+    toRepositoryInput() {
         return this.userRepositoryInput.input(
-            new MyDataObject(this.userEntity.id, this.userEntity)
+            new MyDataObject(this.userEntity.id, this.userEntity.name)
         )
     }
 }

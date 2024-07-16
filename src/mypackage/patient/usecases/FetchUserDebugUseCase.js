@@ -5,7 +5,7 @@ import UserRepository from '@/mypackage/patient/repositories/UserRepository';
 import FetchUserUseCaseOutput from '@/mypackage/patient/usecases/InputOutput/FetchUserUseCaseOutput';
 
 @injectable()
-export default class FetchUserUseCase {
+export default class FetchUserDebugUseCase {
   constructor(
   ) {
     this.userRepository = container.get(UserRepository);
@@ -13,9 +13,9 @@ export default class FetchUserUseCase {
   }
 
   async execute(input) {
-    await delay(5000);
-    console.log("fetch1");
+    await delay(2000);
     const repositoryOutData = await this.userRepository.fetchUserById(input.toRepositoryInput());
+    console.log(repositoryOutData.myDataObject);
     return  this.fetchUserUseCaseOutput.toEntityObject(repositoryOutData.myDataObject);
   }
 }

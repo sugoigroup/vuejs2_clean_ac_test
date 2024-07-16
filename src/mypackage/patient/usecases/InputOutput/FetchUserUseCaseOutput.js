@@ -9,13 +9,11 @@ import User from '@/mypackage/patient/entities/User';
 export default class FetchUserUseCaseOutput {
     outputData;
     toEntityObject(respositoryData) {
-        console.log(respositoryData.id);
-        this.outputData = new MyEntity1(respositoryData.id, respositoryData.name, {'a': 'b'}, new User('iod', 'name'))
+        this.outputData = new MyEntity1(respositoryData.id, respositoryData.title, {'a': 'b'}, new User('iod', 'name'))
         return this;
     }
     
     get() {
-        console.log(this.outputData);
         return this.outputData;
     }
 

@@ -1,4 +1,4 @@
-import DataTypeOf from '@/mypackage/entity/DataTypeOf';
+import DataTypeOf from '@/mypackage/shared/jsValueTypeChecker/DataTypeOf';
 
 
 export default class EntityAbs {

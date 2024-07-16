@@ -1,5 +1,5 @@
 
-import EntityAbs from '@/mypackage/entity/EntityAbs';
+import EntityAbs from '@/mypackage/shared/jsValueTypeChecker/TypeChecker';
 
 export default class MyEntity1 extends EntityAbs {
     id;
