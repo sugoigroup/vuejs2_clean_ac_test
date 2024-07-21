@@ -4,63 +4,63 @@
     ><br />
     <span v-if="user">User: {{ username }}</span
     ><br />
-    <button @click="fetchUser">Fetch User</button>
+    <button @click="fetchUser">Fetch User2</button>
+    <Child/>
+
+    -------------------
+    <ul>
+      <li v-for="item in user" :key="item.id">
+        {{ item.name }}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-import container from '@/di/patientInjector'
-import FetchUserUseCase from '@/mypackage/patient/usecases/FetchUserUseCase';
 
-import FetchUserUseCaseInput from '@/mypackage/patient/usecases/InputOutput/FetchUserUseCaseInput';
-import MyEntity1 from '@/mypackage/patient/entities/MyEntity1';
-import User from '@/mypackage/patient/entities/User';
+
+import childWrapper from "./childs/child-wrapper.vue"
+import {  mapState, mapActions } from 'vuex';
 
 export default {
-  data() {
-    return {
-      user: null,
-    };
+  components: {
+    Child : childWrapper
   },
+  // data() {
+  //   return {
+  //     user: null,
+  //   };
+  // },
   computed: {
+    ...mapState('sampleModule', ['user']),
     userid: function() {
-        return this.user.get().id;
+      debugger;
+        return this.user.id;
       },
 
       username: function() {
-        return this.user.get().name;
+        return this.user.name;
       }
   },
+  watch: {
+    user(newVal) {
+      if (newVal === null) {
+        this.setUser();
+      }
+    }
+  },
+  created() {
+    this.setUser();
+
+  },
+
+  beforeDestroy() {
+      this.resetState();
+    },
   methods: {
+    ...mapActions('sampleModule', ['setUser','resetState']),
     async fetchUser() {
-      const fetchUserUseCase = container.get(FetchUserUseCase);
-      const fetchUserUseCaseInput = container.get(FetchUserUseCaseInput);
-
-
-
-    const [user1, user2] = await Promise.all([
-      fetchUserUseCase.execute(fetchUserUseCaseInput.input(
-          new MyEntity1 (
-            1,
-            'myName',
-            {'aa':'a'},
-            new User('id', 'name')
-          )
-        )),
-        fetchUserUseCase.execute(fetchUserUseCaseInput.input(
-          new MyEntity1 (
-            2,
-            'myName2',
-            {'aa2':'a2'},
-            new User('id2', 'name2')
-          )
-        ))
-    ]);
-
-
-      console.log(user1);
-      console.log(user2);
-      this.user = user1;
+      this.setUser();
 
     }
 
